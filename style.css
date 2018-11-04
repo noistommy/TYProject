@@ -1,0 +1,971 @@
+/* @charset "UTF-8"; */
+
+/* fonts import */
+
+/* @font-face {
+    font-family: 'BebasNeue_0';
+    src: url('./fonts/BebasNeue_0.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+/*reset 정의*/
+
+/* reset */
+
+html {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
+}
+
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+textarea,
+p,
+blockquote,
+th,
+td,
+input,
+select,
+button,
+a {
+    margin: 0;
+    padding: 0;
+    /* font-family: 'Nato', 'Helvetica Neue', Arial, Helvetica, sans-serif; */
+    font-family: 'Century Gothic', '맑은고딕', 'Nato', 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+fieldset,
+img {
+    border: 0;
+}
+
+dl,
+ul,
+ol,
+menu,
+li {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+input,
+select,
+textarea,
+button {
+    vertical-align: middle;
+}
+
+button {
+    border: 0 none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+body,
+th,
+td,
+input,
+select,
+textarea,
+button {
+    line-height: 1.5;
+    color: #454545;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+a:active,
+a:hover,
+a:visited {
+    text-decoration: none;
+}
+
+address,
+caption,
+cite,
+code,
+dfn,
+em,
+var {
+    font-style: normal;
+    font-weight: normal;
+}
+
+.clear {
+    display: block;
+    clear: both;
+}
+
+.zoomboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#Dashboard {
+    height: 100%;
+}
+
+#Dashboard.dark {
+    background: #000000;
+    color: #ffffff;
+}
+
+/* ::-webkit-scrollbar {
+  display:none;
+} */
+
+.loadingPanel {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 9999;
+}
+
+.loadingPanel.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.loadingPanel .content {
+    font-size: 2em;
+    font-weight: 700;
+    padding: 1em;
+    background-color: #fff;
+    box-shadow: 0 0 1em #ccc;
+    text-align: center;
+}
+
+.loadingPanel .content span {
+    font-size: 3em;
+    padding: 10px 10px 30px 10px;
+    display: block;
+
+}
+
+.header {
+    width: 100%;
+    padding: .5em .8em;
+    font-size: 1.5em;
+    z-index: 100;
+    box-sizing: border-box;
+    color: #353535;
+    height: 56px;
+    border-bottom: 1px solid #ccc;
+}
+
+.header .main {
+    font-weight: 700;
+}
+
+.header .sub {
+    line-height: 1;
+    font-size: 0.6em;
+}
+
+.header .toggleDemo {
+    cursor: pointer;
+    position: absolute;
+    top: 7px;
+    right: 5px;
+    float: right;
+    padding: 10px 20px;
+    background-color: #4e4d4d;
+    color: #ffffff;
+}
+
+.header .toggleDemo:hover {
+    background-color: #d9d9d9;
+    color: #000000;
+}
+
+.header .reload,
+.header .setting {
+    cursor: pointer;
+    position: absolute;
+    top: .3em;
+    right: .3em;
+    padding: 12px;
+    border-radius: 3px;
+    line-height: 1em;
+    color: #3a6bb5;
+    font-weight: 700;
+}
+
+.header .setting {
+    right: 3em;
+}
+
+.header .reload:hover,
+.header .setting:hover {
+    background-color: #3a6bb5;
+    color: #ffffff;
+}
+
+.header i {
+    line-height: 1;
+}
+
+.settingPanel {
+    font-size: 12px;
+    position: absolute;
+    top: -100%;
+    left: 0;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    /* box-shadow: inset 0 3px 15px #e9e9e9; */
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.settingPanel.open {
+    top: 0;
+    -webkit-transition: all 500ms ease-in-out;
+    -moz-transition: all 500ms ease-in-out;
+    -ms-transition: all 500ms ease-in-out;
+    -o-transition: all 500ms ease-in-out;
+    transition: all 500ms ease-in-out;
+}
+
+.setting-container {
+    background-color: rgba(255, 253, 253, 0.95);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settingPanel .setting-wrap {
+    width: 80%;
+    /* height: 95%; */
+    box-shadow: 5px 5px 20px rgba(59, 59, 59, 0.171);
+    background-color: #fff;
+}
+
+.settingPanel .setting-wrap .setTitle {
+    font-size: 2em;
+    font-weight: 700;
+    padding: .8em 1.5em;
+    background: #3a6bb5;
+    color: #ffffff;
+}
+
+.settingPanel .setting-wrap .setContent {
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.settingPanel .setting-wrap .setContent .setIllegalParking,
+.settingPanel .setting-wrap .setContent .setSpecialReport {
+    display: none;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList {
+    display: flex;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList>li {
+    padding: 10px;
+    width: 300px;
+    border-right: 1px solid #ccc;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList>li:last-child {
+    border: 0;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList>li .content {
+    padding: 10px;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList .title {
+    padding: .5em 1.2em;
+    font-weight: 700;
+    color: #3a6bb5;
+    width: 100%;
+    background-color: #eee;
+    text-align: center;
+}
+
+.settingPanel .setting-wrap .setContent ul.setList ul li:hover {
+    color: #555;
+    background-color: #f9f9f9;
+}
+
+/* 
+.settingPanel .setting-wrap .setContent ul.setList ul li span.labeling {
+    font-size: .2em;
+    background-color: #68c0a5;
+    color: #ffffff;
+    padding: .3em .8em;
+    border-radius: 1.2em;
+} */
+
+/* .settingPanel .setting-wrap .timeSet,
+.settingPanel .setting-wrap .locationSet {
+    padding: 20px;
+    width: 30%;
+} */
+
+.settingPanel .setting-wrap ul li .content .timeType {
+    border-radius: 20px;
+    overflow: hidden;
+    width: auto;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton {
+    cursor: pointer;
+    width: 20%;
+    float: left;
+    overflow: hidden;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton:first-child {
+    border-top-left-radius: 2.2em;
+    border-bottom-left-radius: 2.2em;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton:last-child {
+    border-top-right-radius: 2.2em;
+    border-bottom-right-radius: 2.2em;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.active {
+    width: 80%;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType.modeHDM .tbutton.active,
+.settingPanel .setting-wrap ul li .content .timeType.modeRDM .tbutton.active {
+    width: 60%;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType.modeM .tbutton.active {
+    width: 100%;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton .tTag {
+    /* padding: 0.3em .5em; */
+    text-align: center;
+    position: relative;
+    color: #ccc;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton .tTag:hover {
+    color: #333;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton .tTag span {
+    display: inline-block;
+    /* position: absolute; */
+    padding: .3em .5em;
+    width: 100%;
+    background-color: #ccc;
+    color: #ffffff;
+    font-weight: 700;
+    -webkit-transition: all 200ms ease-in-out;
+    -moz-transition: all 200ms ease-in-out;
+    -ms-transition: all 200ms ease-in-out;
+    -o-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.active .tTag span {
+    padding: .3em 1.2em;
+    cursor: default;
+    -webkit-transition: all 200ms ease-in-out;
+    -moz-transition: all 200ms ease-in-out;
+    -ms-transition: all 200ms ease-in-out;
+    -o-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.day .tTag span:hover,
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.day.active .tTag span {
+    background-color: #1678c2;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.month .tTag span:hover,
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.month.active .tTag span {
+    background-color: #66c2a5;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.real .tTag span:hover,
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.real.active .tTag span {
+    background-color: #e6c977;
+}
+
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.hour .tTag span:hover,
+.settingPanel .setting-wrap ul li .content .timeType .tbutton.hour.active .tTag span {
+    background-color: rgba(213, 62, 79, 1);
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li {
+    padding: .5em 1.2em;
+    /* border: 1px solid #eee; */
+    margin-bottom: .3em;
+    /* border-radius: 1.5em; */
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li span {
+    margin-right: .5em;
+    color: #ccc;
+    font-size: 1.2em;
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li.selected {
+    /* border:1px solid #3a6bb5; */
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li.selected span {
+    /* /* background-color: #3a6bb5; */
+    color: #3a6bb5;
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li.selected:hover {
+    background-color: #e6c977;
+    color: #ffffff;
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul li.allSelect.allSelected {
+    background-color: #66c2a5;
+    color: #ffffff;
+    font-weight: 700;
+    /* border-radius: 1.5em; */
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul.WindSpeedList li.allSelect,
+.settingPanel .setting-wrap ul li .content .localSelectList ul.RainFallList li.allSelect {
+    width: 100%;
+}
+
+.settingPanel .setting-wrap ul li .content .localSelectList ul.WindSpeedList li,
+.settingPanel .setting-wrap ul li .content .localSelectList ul.RainFallList li {
+    float: left;
+    width: 45%;
+    margin: 3px;
+    /* text-align: center; */
+    padding: .5em 1.2em;
+    border-radius: 0;
+}
+
+.settingPanel .setting-wrap ul li .content .subTitle {
+    padding: 20px 0;
+    font-size: 1.2em;
+    ;
+}
+
+.settingPanel .setting-wrap ul li .content buttons {
+    padding: .5em 2em;
+    background-color: #efefef;
+}
+
+.settingPanel .setting-wrap .setfooter button {
+    padding: .5em 2em;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.settingPanel .setting-wrap .setfooter button:hover {
+    background-color: #3a6bb5;
+    color: #ffffff;
+    font-weight: 700;
+    border: 0;
+    box-sizing: content-box;
+}
+
+.settingPanel .setting-wrap .setfooter {
+    padding: 10px;
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.settingPanel .setting-wrap .carflow ul li {
+    padding: 5px;
+    background-color: #eee;
+    margin-bottom: 5px;
+}
+
+.splitPanel {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: -1;
+}
+
+.splitPanel .split-background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #e7ebee;
+}
+
+.splitPanel .split-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.splitPanel .split-wrapper {
+    width: 90%;
+    height: 90%;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 1em;
+}
+
+.splitPanel.open {
+    display: block;
+    z-index: 99;
+}
+
+.splitChartItem {
+    width: 100%;
+    height: 40vh;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.splitChartItem .title {
+    padding: 5px;
+    font-size: 1em;
+    font-weight: 700;
+    color: #545454;
+    text-align: center;
+}
+
+/* .splitChartItem .setting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+    color: #b4b4b4;
+    box-sizing: border-box;
+} */
+
+.closeButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 3.5em;
+    padding: 0.8em;
+    cursor: pointer;
+}
+
+.realTime {
+    position: absolute;
+    top: .5rem;
+    right: 8rem;
+    padding: .5em 1.5em;
+    /* border: 2px solid #ccc; */
+    border-radius: 25px;
+    font-size: .8em;
+}
+
+.realTime>div {
+    display: inline-block;
+}
+
+.realTime .r_days {
+    font-size: .8em;
+    padding: 5px 7px 3px 7px;
+    background-color: #66c2a5;
+    border-radius: 11px;
+}
+
+.realTime .r_time {
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.chartSet {
+    position: absolute;
+    width: 100%;
+    background-color: #ffffff;
+    /* background-color: #e7ebee; */
+    height: 100%;
+}
+
+.chartSet .container {
+    height: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.chartSet .eightWrap {
+    display: flex;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.chartSet .chartItem {
+    width: 60%;
+    background-color: #fff;
+    padding: 10px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 40vh;
+    border: 1px solid #ccc;
+}
+
+.chartSet .mainItem {
+    width: 100%;
+    background-color: #fff;
+    border-radius: 5px;
+    position: relative;
+}
+
+.chartSet .subItem {
+    width: 45%;
+}
+
+.chartSet .mainItem .chartItem {
+    border: 0;
+}
+
+.chartSet .mainItem .title {
+    background-color: #fff;
+    color: #9e9e9e;
+}
+
+.chartSet .subItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.chartSet .chartItem {
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.chartSet .mainItem .chartItem {}
+
+.expChart {}
+
+.expChart .topic {
+    color: #9e9e9e;
+    padding: 20px;
+    font-size: 1.2em;
+    ;
+}
+
+.expChart .dataList ul li {
+    padding: .5em 1.2em;
+    color: #999;
+}
+
+.expChart .dataList ul li span {
+    margin-right: 5px;
+}
+
+.expChart .dataList ul li span.arrow-right {
+    color: rgba(50, 136, 189, 1);
+}
+
+.expChart .dataList ul li span.arrow-left {
+    color: rgba(253, 174, 97, 1);
+}
+
+.setType .typeBtns {
+    text-align: center;
+}
+
+.setType .typeBtns .typebtn {
+    padding: .8em 1.5em;
+    display: inline-block;
+    background-color: #eee;
+    font-weight: 700;
+    border-radius: 5px;
+}
+
+.setType .typeBtns .typebtn:hover {
+    background-color: #ccc;
+}
+
+.setType .typeBtns .typebtn.active {
+    background-color: #d36f7b;
+    color: #fff;
+}
+
+.chartSet .chartItem .title {
+    font-size: 1.2em;
+    color: #9e9e9e;
+    text-align: center;
+    padding: 5px;
+}
+
+.chartSet .chartItem .content {
+    width: 100%;
+    height: 95%;
+}
+
+.chartSet .chartItem .setting {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 5px;
+    color: #b4b4b4;
+    box-sizing: border-box;
+}
+
+.chartSet .chartItem .setting .split,
+.chartSet .chartItem .setting .ex {
+    cursor: pointer;
+    float: left;
+    padding: 6px;
+    font-size: 1.5em;
+}
+
+.chartSet .chartItem .setting .ex:hover {}
+
+.chartSet .chartItem .setting .btns {
+    float: right;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+.chartSet .chartItem .setting .btns .btn {
+    cursor: pointer;
+    float: left;
+    padding: 0.7em;
+    background-color: #f5f5f5;
+    border-radius: 30px;
+    margin-right: 5px;
+    text-align: center;
+    display: inline-block;
+    line-height: 1em;
+}
+
+.chartSet .chartItem .setting .btns .btn:hover {
+    background-color: #e5e5e5;
+}
+
+.chartSet .chartItem .setting .btns .btn.active {
+    color: #ffffff;
+    background-color: #d36f7b;
+}
+
+.exBoard {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    z-index: 999;
+}
+
+.exBoard.open {
+    display: block;
+}
+
+.exBoard .exBackground {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #e7ebee;
+}
+
+.exBoard .exContents {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.exBoard .exContents .ex-content-wrap {
+    width: 60%;
+    height: 90%;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 5px 5px 30px #ccc;
+}
+
+.exBoard .exContents .chartEx {
+    width: 100%;
+    height: 80%;
+}
+
+.exBoard .exContents .chartEx .title {
+    padding: 20px;
+    font-size: 2em;
+    font-weight: 700;
+    color: #545454;
+    margin-bottom: 20px;
+}
+
+.exBoard .exContents .table {
+    /* display: none; */
+    padding: 30px;
+}
+
+.exBoard .exContents .table ul li {
+    display: flex;
+    border-top: 1px solid #f5f5f5;
+}
+
+.exBoard .exContents .table ul li:nth-child(2n) {
+    background-color: #F2F2F2;
+}
+
+.exBoard .exContents .table ul li:first-child>div {
+    border-right: 1px solid #fff;
+}
+
+.exBoard .exContents .table ul li>div {
+    padding: 5px 12px;
+    text-align: center;
+    flex-grow: 1;
+    color: #5f5f5f;
+    text-align: right;
+    width: 10rem;
+}
+
+.exBoard .exContents .table ul li>div:hover {
+    font-weight: 700;
+    color: #000000;
+}
+
+.exBoard .exContents .table ul li>div:first-child {
+    padding: 5px 12px;
+    text-align: center;
+    flex-grow: 0;
+}
+
+.exBoard .exContents .table ul li:first-child>div {
+    background-color: #66c2a5;
+    color: #fff;
+}
+
+.exBoard .exContents .table ul li .th,
+.exBoard .exContents .table ul li .tr {
+    width: 200px;
+}
+
+.legend-con ul {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.legend-con ul li {
+    display: inline-block;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 0 2px;
+}
+
+.legend-con ul li span {
+    display: inline-block;
+}
+
+.legend-con ul li .chart-legend {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+    margin-right: 2px;
+}
+
+.inoutCar .legend-con ul {
+    flex-direction: column;
+}
+
+.inoutCar .legend-con ul li {}
+
+.illegalCarList {
+    height: 40%;
+}
+
+.illegalCarList ul {
+    display: flex;
+    flex-direction: column;
+    height: 75%;
+    flex-wrap: wrap;
+    padding: 5px;
+    margin: 10px;
+    border: 2px solid #eee;
+}
+
+.illegalCarList ul li {
+    padding: 3px 10px;
+    font-size: .8em;
+    border-radius: 10px;
+}
+
+.illegalCarList ul li span {
+    float: left;
+    font-weight: 700;
+}
+
+.illegalCarList ul li span.count {
+    margin-right: 5px;
+}
+
+.illegalCarList ul li span.idata {
+    display: inline-block;
+    float: right;
+    font-size: 1.2em;
+    font-weight: 700;
+    padding: 4px 5px 2px 5px;
+    border-radius: 12px;
+}

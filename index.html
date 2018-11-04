@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./icons.css">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./semantic/semantic.min.css">
+    <link rel="stylesheet" href="./css/fontawesome-all.min.css">
+
+    <title>TY Dashboard</title>
+    
+</head>
+<body>
+<div id="Dashboard">
+    <!-- <div class="loadingPanel" :class="{loading: isLoading}">
+        <div class="content">
+            <span><i class="icon-stats-bars"></i></span>
+            그래프 생성중
+        </div>
+    </div> -->
+    <div class="exBoard" :class="{open: extendBoardOpen}" @click="closeExtend()">
+        <div class="exBackground"></div>
+        <div class="exContents">
+            <div class="ex-content-wrap">
+                <div class="chartEx chart extendChart" onclick="event.stopPropagation()">
+                    <div class="title"></div>
+                    <div class="content" style="width: 100%; height: 100%;">
+                        <canvas id="extendChart"></canvas>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        <div class="closeButton" @click="closeExtend()">
+            <span>
+                <i class="icon-cancel-circle"></i>
+            </span>
+        </div>
+    </div>
+    <div class="splitPanel" :class="{ open: splitOpen }"  @click="closeSplit()">
+        <div class="split-background"></div>
+        <div class="split-container">
+            <div class="split-wrapper">
+                <div class="ui grid">
+                    <template v-for="(splititem, index) in splitNum">
+                        <div class="four wide column">
+                            <div class="splitChartItem" :class="'split'+index" onclick="event.stopPropagation()" >
+                                <div class="title"></div>
+                                <div class="content" style="width: 100%; height: 90%;">
+                                    <canvas :id="'split'+index"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="closeButton" @click="closeSplit()">
+            <span><i class="icon-cancel-circle"></i></span>
+        </div>
+    </div>
+    <div class="header">
+		<div class="reload" onClick="window.location.reload();"><span><i class="icon-spinner11"></i></span></div>
+		<div class="setting" @click="toggleSetting()"><span><i class="icon-cog"></i></span></div>
+    </div>
+    <div class="settingPanel" :class="{ open: settingOpen }">
+        <div class="setting-container">
+            <div class="setting-wrap">
+                <div class="setTitle">
+                    설정
+                </div>
+                <div class="setContent">
+                    <ul class="setList">
+                        <li v-for="(setitem, index) in chartOpt" :class="'set'+setitem.Id">
+                            <div class="title">{{setitem.Name}}</div>
+                            <div class="content">
+                                <div class="subTitle">
+                                    <span>
+                                        <i class="icon-calendar"></i>
+                                    </span>조회기간</div>
+                                <div class="timeType" v-if="setitem.option.ttype !== 'M'" :class="'mode'+setitem.option.ttype">
+                                    <div class="tbutton real" v-if="setitem.option.ttype.indexOf('R') > -1" :class="{ active: setitem.AxisKind == 'RealTime' }"
+                                        @click="changeTimeType(index, 'RealTime')">
+                                        <div class="tTag">
+                                            <span class="tBtn">{{ setitem.AxisKind == 'RealTime' ? '실시간' : 'R' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="tbutton hour" v-if="setitem.option.ttype.indexOf('H') > -1" :class="{ active: setitem.AxisKind == 'TwelveHours' }"
+                                        @click="changeTimeType(index, 'TwelveHours')">
+                                        <div class="tTag">
+                                            <span class="tBtn">{{ setitem.AxisKind == 'TwelveHours' ? '시간별' : 'H' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="tbutton day" v-if="setitem.option.ttype.indexOf('D') > -1" :class="{active: setitem.AxisKind == 'SevenDays'}"
+                                        @click="changeTimeType(index, 'SevenDays')">
+                                        <div class="tTag">
+                                            <span class="tBtn">{{ setitem.AxisKind == 'SevenDays' ? '일별' : 'D' }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="tbutton month" v-if="setitem.option.ttype.indexOf('M') > -1" :class="{active: setitem.AxisKind == 'TwelveMonths'}"
+                                        @click="changeTimeType(index, 'TwelveMonths')">
+                                        <div class="tTag">
+                                            <span class="tBtn">{{ setitem.AxisKind == 'TwelveMonths' ? '월별' : 'M' }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="localSelectList">
+                                    <div class="subTitle">
+                                        <span>
+                                            <i class="icon-location"></i>
+                                        </span>지역</div>
+                                    <ul :class="setitem.Id+'List'">
+                                        <li class="allSelect" :class="{allSelected : setitem.isAllChecked == true}" @click="toggleAllSelect(setitem)">
+                                            <template v-if="setitem.isAllChecked">
+                                                전체 취소
+                                            </template>
+                                            <template v-else>
+                                                전체 선택
+                                            </template>
+    
+                                        </li>
+                                        <li class="checkItem" v-for="(element, index) in setitem.Groups" :class="{selected: element.IsChecked}" @click="changeLocationList(setitem, index)">
+                                            <span class="labeling">
+                                                <i class="fa fa-check-square" v-if="element.IsChecked"></i>
+                                                <i class="fa fa-square" v-else></i>
+                                            </span>{{element.Name | removeLine}}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+    
+    
+                        </li>
+                    </ul>
+                </div>
+                <div class="setfooter">
+                    <div class="accessBtn">
+                        <button class="" onClick="updateSettingData()">적용</button>
+                        <button class="" @click="toggleSetting()">취소</button>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    <div class="chartSet">
+        <div class="container">
+            <div class="ui grid">
+            <!-- <template v-for="(optitem, index) in chartOpt"> -->
+            <template v-for="(chartId, index) in chartIds">
+                <template v-if = "index == 0 || index == 1">
+                    <div class="six wide column">
+                        <div class="chartItem" :class="'P'+(index+1)">
+                            <div class="title"></div>
+                            <div class="content"  style="width: 100%; height: 90%;">
+                                <canvas :id="'P'+(index+1)"></canvas>
+                            </div>
+                            <div class="legend-con" :id="'legend-con-'+index"></div>
+                            <div class="setting">
+                                <div class="ex" @click="openExtend(chartId)">
+                                    <span>
+                                        <i class="icon-plus"></i>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                <template v-else>
+                    <div class="four wide column">
+                        <div class="chartItem" :class="'P'+(index+1)">
+                            <div class="title"></div>
+                            <div class="content" style="width: 100%; height: 90%;">
+                                <canvas :id="'P'+(index+1)"></canvas>
+                            </div>
+                            <div class="legend-con" :id="'legend-con-'+index"></div>
+                            <div class="setting">
+                                <div class="ex" @click="openExtend(chartId)" v-if="isSplit[index] == 'N'">
+                                    <span>
+                                        <i class="icon-plus"></i>
+                                    </span>
+                                </div>
+                                <div class="split" @click="openSplit(chartId)" v-else>
+                                    <span>
+                                        <i class="icon-enlarge"></i>
+                                    </span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </template>
+            </template>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="./js/config.js"></script>
+<script src="./js/jquery-3.2.1.min.js"></script>
+<script src="./js/vue.min.js"></script>
+<script src="./js/Moment.js"></script>
+<script src="./js/Chart.min.js"></script>
+<script src="./semantic/semantic.min.js"></script>
+<script src="./chartconfig.js"></script>
+<script>
+ 
+    var dashboard = new Vue({
+        el: "#Dashboard",
+        data: {
+            settingData: [],
+            settingOpen: false,
+            splitOpen: false,
+            extendBoardOpen: false,
+            chartObject:{},
+            extendObject:{},
+            chartOpt: [],
+            chartsList: [],
+            splitNum:0,
+            splitList: [],
+            baseOption: chartoptions,
+            chartIds: ["CarInOut", "CarFlow", "IllegalParking", "TideLevel", "Rainfall", "WindSpeed", "SpecialReport"],
+            isSplit: ['N', 'N', 'N', 'N', 'N', 'N', 'N'],
+            autoRoll:false,
+            allSelected: false,
+            locationListOn: true,
+            isLoading: false
+        },
+        created: function () {
+            console.log("created");
+            getSettingData();
+            $.each(this.chartIds, function(i, chartId){
+                panelId = "P" + (i+1);
+                // console.log(panelId);
+                addChartsInChartsList(panelId, chartId);
+
+            });
+                
+            setInterval(function () {
+                // console.log(dashboard.chartsList);
+                $.each(dashboard.chartsList, function (i, charts) {
+                    charts.next();
+                })
+            }, 3000);
+
+        },
+        mounted: function(){
+            console.log("mounted");
+            this.isLoading = true;
+        },
+        methods: {
+            openExtend: function(chartId) {
+                this.extendBoardOpen = true;
+                console.log(this.extendObject)
+                if(this.extendObject.canvas != undefined){
+
+                    this.extendObject.destroy();
+                }
+                setChartsOnExtend(chartId);
+            },
+            closeExtend: function(){
+                this.extendBoardOpen = false;
+            },
+            openSplit: function(chartId) {
+                this.splitOpen = true;
+                if(chartId == "TideLevel") {
+                    this.splitNum = 2;
+                }else {
+                    this.splitNum = 8;
+                }
+                setChartsOnSplit(chartId);
+            },
+            closeSplit: function(){
+                this.splitOpen = false;
+            },
+             toggleSetting: function () {
+                this.settingOpen = !this.settingOpen;
+                getSettingData();
+            },
+            toggleAllSelect: function (parent) {
+                console.log(parent);
+                parent.isAllChecked = !parent.isAllChecked;
+                for (var i = 0, child; child = parent.Groups[i]; i++) {
+                    child.IsChecked = parent.isAllChecked;
+                }
+                // console.log(this.chartOpt);
+
+            },
+            changeTimeType: function (i, type) {
+                this.chartOpt[i].AxisKind = type;
+                offLocationList(i, type)
+
+            },
+            changeLocationList: function (parent, i) {
+                parent.Groups[i].IsChecked = !parent.Groups[i].IsChecked;
+
+                var selectCount = 0
+                for (var j = 0, child; child = parent.Groups[j]; j++) {
+                    if (!child.IsChecked) {
+                        selectCount = selectCount + 1;
+                        // dashboard.colorSet.border.push(colorset11[j]);
+                        // dashboard.colorSet.bg.push(colorset1[j]);
+                    }
+                }
+                if (selectCount > 0) {
+                    parent.isAllChecked = false;
+                } else {
+                    parent.isAllChecked = true;
+                }
+            },
+        }
+    })
+    console.log("script");
+    function getSettingData() {
+        var $url = BASE_ROOT + "/ty/chart" + MODE_TEST + "/setting/favorites"
+        $.ajax({
+            url: $url,
+            type: 'get',
+        }).done(function (data) {
+            console.log(data);
+            if (data.datas == []) {
+                alert("No Data");
+            } else {
+                dashboard.settingData = data;
+                dashboard.chartOpt = data;
+                $.each(dashboard.chartOpt, function (i, options) {
+                    options["option"] = chartConfig[i];
+                    dashboard.chartOpt[i]["isAllChecked"] = checkAllChecked(dashboard.chartOpt[i].Groups);
+                    offLocationList(i, options.AxisKind);
+                })
+            }
+
+        }).fail(function (error) {
+            console.log(error)
+        })
+    };
+
+    function offLocationList(i, type) {
+        if ((dashboard.chartOpt[i].Id == "TideLevel" || dashboard.chartOpt[i].Id == "WindSpeed") && (type == 'SevenDays' || type == "TwelveMonths")) {
+
+            $('.' + dashboard.chartOpt[i].Id + 'List').hide();
+            $.each(dashboard.chartOpt[i].Groups,function(j, element){
+                element.IsChecked = true;
+            })
+
+            dashboard.isSplit[i] = "Y";
+
+        } else {
+            // console.log("showList")
+            $('.' + dashboard.chartOpt[i].Id + 'List').show();
+        }
+    }
+
+    function checkAllChecked(targetlist) {
+        // console.log(targetlist);
+        var targetState = true;
+        $.each(targetlist, function (i) {
+            if (targetlist[i].IsChecked == false) {
+                targetState = false;
+            }
+        })
+        return targetState;
+    }
+
+    function updateSettingData() {
+        console.log("update start")
+        var $url = BASE_ROOT + "/ty/chart" + MODE_TEST + "/setting/favorites";
+        // $.each(dashboard.chartOpt,function(i){
+        //     console.log(dashboard.chartOpt[i].option);
+        //     delete dashboard.chartOpt[i].option
+        // })
+        dashboard.chartOpt.colorset = dashboard.colorSet;
+        // console.log(dashboard.chartOpt);
+        var $data = JSON.stringify(dashboard.chartOpt);
+        // $data = dashboard.settingData;
+        // console.log(typeof ($data));
+        $.ajax({
+            url: $url,
+            type: 'post',
+            data: $data
+        }).done(function (data) {
+            // console.log(data);
+            location.reload();
+
+
+        }).fail(function (error) {
+            console.log("error")
+            console.log(error)
+        })
+    }
+
+
+    function GetChartDataUrl(chartId) {
+        return BASE_ROOT + "/ty/chart" + MODE_TEST + "/favorite/" + chartId;
+    }
+
+    function setChartsOnExtend(chartId) {
+        var panelId = "extendChart"
+        var $url = GetChartDataUrl(chartId);
+        $.ajax({
+            url: $url,
+            type: 'GET',
+            dataType: 'json',
+            }).done(function(data){
+                console.log(data);
+                charts = createCharts(panelId, data);
+                charts.next();
+        }).fail(function (jqXHR, textStatus) {
+                console.log(textStatus);
+        });
+    }
+
+    function setChartsOnSplit(chartId) {
+        var $url = GetChartDataUrl(chartId);
+        $.ajax({
+            url: $url,
+            type: 'GET',
+            dataType: 'json',
+        }).done(function (data) {
+            console.log(data);
+            charts = createCharts(panelId, data);
+            // panelNames = buildPanels(charts.chartInfos.length);
+            console.log(dashboard.splitList)
+            $.each(dashboard.splitList, function (i, splititem) {
+                if(i < dashboard.splitList.length){
+                    panelId = "split"+i;
+                    
+                    setChart(panelId, splititem);
+                }
+            });
+             console.log(dashboard.splitList);
+        }).fail(function (jqXHR, textStatus) {
+            console.log(textStatus);
+        });
+    }
+    function addChartsInChartsList(panelId, chartId) {
+        
+        var $url = GetChartDataUrl(chartId);
+        $.ajax({
+            url: $url,
+            type: 'GET',
+            dataType: 'json',
+            }).done(function(data){
+                console.log(data);
+                charts = createCharts(panelId, data);
+                dashboard.chartsList.push(charts);
+                charts.next();
+                // setTimeout(function(){
+                //     
+                //     dashboard.isLoading = false;
+                // },1500)
+                
+        }).fail(function (jqXHR, textStatus) {
+                console.log(textStatus);
+        });
+    }
+
+    function createCharts(panelId, data){
+        var charts = {
+            panelId: panelId,
+            chartId: data.ChartId,
+            chartInterval: 5,
+            chartIndex: -1,
+            chartInfos: [],
+            next: function () {
+                chartCount = this.chartInfos.length;
+                if (chartCount == 1 && this.chartIndex < 0){
+                    this.chartIndex = 0;
+                    setChart(this.panelId, this.chartInfos[this.chartIndex]);
+                }else if(chartCount > 1){
+                    // dashboard.autoRoll = true;
+                    this.chartIndex++;
+                    if (this.chartIndex >= chartCount) {
+                        this.chartIndex = 0;
+                    }
+                    setChart(this.panelId, this.chartInfos[this.chartIndex]);
+                }
+            }
+        };
+
+        if (data.ChartList.length > 1) {
+            dashboard.splitList = charts.chartInfos;
+        }
+
+        $.each(data.ChartList, function (i) {
+            var chartInfo = getChartInfoData(data.ChartList[i], charts.chartId);
+
+            
+
+            charts.chartInfos.push(chartInfo);
+
+            
+        })
+
+        
+        
+        return charts;
+    }
+
+    function getChartInfoData (chartData, id) {
+        console.log(id+"."+chartData.ChartName)
+        var chartInfo = {
+            chartTitle: "Default Title",
+            chartType: "line",
+            extendOption: {},
+            chartDataSet: {
+                labels: [],
+                datasets: []
+            }
+        };
+
+        chartInfo.extendOption = dashboard.baseOption[chartData.ChartType];//차트속성
+        chartInfo.chartTitle = chartData.ChartName;//차트제목
+        chartInfo.chartType = chartData.ChartType;//차트종류
+        var colorSets = getColorsets(id)
+        chartInfo.chartDataSet.labels = chartData.AxisLabels;
+        var dataList = [];
+        $.each(chartData.Series, function (i) {
+            if (chartInfo.chartType == "doughnut") {
+                var dataItem = {
+                    data: chartData.Series[i].Values,
+                    backgroundColor: colorSets,
+                    // backgroundColor: colorset_bg,
+                    hidden: false
+                }
+            } else {
+                //chartInfo.extendOption.scales.yAxes[0].scaleLabel.labelString = chartData.YAxisUnitName;
+                //chartInfo.extendOption.scales.xAxes[0].scaleLabel.labelString = chartData.AxisUnitName;
+
+                var dataItem = {
+                    label: chartData.Series[i].Label,
+                    data: chartData.Series[i].Values,
+                    backgroundColor: colorSets[i],
+                    borderColor: colorSets[i],
+                    // backgroundColor: colorset_bg[i],
+                    // borderColor: colorset_b[i],
+                    fill: false,
+                    hidden: false
+                }
+
+                if (chartInfo.chartType == "horizontalBar") {
+                    dataItem.borderColor = colorSets;
+                    dataItem.backgroundColor = colorSets;
+                    // dataItem.borderColor = colorset_b;
+                    // dataItem.backgroundColor = colorset_bg;
+                }
+				//line style
+				if (chartInfo.chartType == "line") {
+                    dataItem.borderWidth = 1.5;
+					if (id == "TideLevel") {
+					dataItem.pointRadius = 0;
+					}
+                }
+            }
+            
+            dataList.push(dataItem);
+
+            chartInfo.chartDataSet.datasets = dataList;
+        })
+        return chartInfo
+    } 
+
+    function setChart(panelId, chartInfo) {
+         $('.' + panelId).find('.title').html(chartInfo.chartTitle);
+        
+        var ctx = $('#' + panelId);
+        var config = {
+            type: chartInfo.chartType,
+            options: chartInfo.extendOption,
+            data: chartInfo.chartDataSet
+        };
+
+        if(panelId == "extendChart"){
+            dashboard.extendObject = new Chart(ctx, config)
+        }else{
+            dashboard.chartObject = new Chart(ctx, config)
+        }
+    }
+
+    function getColorsets(cId) {
+        var result = []
+        $.each(dashboard.chartIds, function(i, chartid) {
+            console.log(chartid, cId)
+            if(chartid === cId) {
+                
+                result = colorsets[i]
+                // console.log(i, result)
+            }
+        })
+        return result
+    }
+</script>
+</body>
+</html>
